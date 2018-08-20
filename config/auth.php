@@ -2,6 +2,8 @@
 
 return [
 
+    'TOKEN_EXPIRE' => env('TOKEN_EXPIRE', 15),
+    'REFRESH_TOKEN_EXPIRE' => env('REFRESH_TOKEN_EXPIRE', 30),
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -42,7 +44,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'passport',
             'provider' => 'users',
         ],
     ],

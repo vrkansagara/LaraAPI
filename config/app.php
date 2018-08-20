@@ -160,6 +160,16 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+
+        /**
+         * Custom provider
+         */
+        Caffeinated\Modules\ModulesServiceProvider::class,
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        Creativeorange\Gravatar\GravatarServiceProvider::class,
+        Arcanedev\Settings\SettingsServiceProvider::class,
+
+
     ],
 
     /*
@@ -208,6 +218,13 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        /**
+         * Custom provider
+         */
+        'Module' => Caffeinated\Modules\Facades\Module::class,
+        'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
+        'Setting' => Arcanedev\Settings\Facades\Setting::class,
 
     ],
 
