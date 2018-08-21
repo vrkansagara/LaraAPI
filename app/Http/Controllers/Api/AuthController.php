@@ -8,7 +8,9 @@ use App\Repositories\UserRepository;
 use App\Rules\Password\StrongPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Lcobucci\JWT\Parser;
 
 
 class AuthController extends ApiController
@@ -48,6 +50,20 @@ class AuthController extends ApiController
 
     public function logoutAction(Request $request)
     {
+
+        $value = $request->bearerToken();
+        $id = (new Parser())->parse($value)->getHeader('jti');
+
+        /**
+         * @todo
+         * @fixme
+         * User coding standard practise.
+         */
+        DB::table('oauth_access_tokens')
+            ->where('id', $id)
+            ->update([
+                'revoked' => true
+            ]);
         $data = [
             'message' => 'You are successfully logout.',
             'token' => $request->headers->get('Authorization')
