@@ -16,6 +16,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\Http\Controllers';
 
+    protected $namespaceApi = 'App\Http\Controllers\Api';
+
+    protected $namespaceApiV1 = 'App\Http\Controllers\Api\V1';
+
+    protected $namespaceApiV2 = 'App\Http\Controllers\Api\V2';
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -37,7 +43,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
 
-        $this->mapWebRoutes();
+//        $this->mapV1ApiRoutes();
+//
+//        $this->mapV2ApiRoutes();
+
+//        $this->mapWebRoutes();
 
         //
     }
@@ -67,7 +77,23 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api')
              ->middleware('api')
-             ->namespace($this->namespace)
+             ->namespace($this->namespaceApi)
              ->group(base_path('routes/api.php'));
+    }
+
+    protected function mapV1ApiRoutes()
+    {
+        Route::prefix('api/v1')
+             ->middleware('api')
+             ->namespace($this->namespaceApiV1)
+             ->group(base_path('routes/api/v1.php'));
+    }
+
+    protected function mapV2ApiRoutes()
+    {
+        Route::prefix('api/v2')
+            ->middleware('api')
+            ->namespace($this->namespaceApiV2)
+            ->group(base_path('routes/api/v2.php'));
     }
 }

@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
 Route::get('/ping', function (Request $request) {
     return response()->json(\Carbon\Carbon::now());
 });
-
-Route::middleware('api')->post('login', 'AuthController@loginAction');
