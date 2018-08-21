@@ -10,7 +10,6 @@
         "barryvdh/laravel-cors": "^0.11.0",
         "barryvdh/laravel-ide-helper": "^2.4",
         "baum/baum": "^1.1",
-        "caffeinated/modules": "^4.3",
         "creativeorange/gravatar": "~1.0",
         "doctrine/dbal": "^2.8",
         "fideloper/proxy": "^4.0",
@@ -68,7 +67,7 @@
         "serve": "php -S 0.0.0.0:8090 -d public/index.php -t public",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "lclear" :"php artisan cache:clear && php artisan cache:forget spatie.permission.cache"
+        "lclear" :"php artisan cache:clear && php artisan cache:forget spatie.permission.cache && php artisan view:clear && rm -rf storage/debugbar/*"
     },
     "config": {
         "preferred-install": "dist",

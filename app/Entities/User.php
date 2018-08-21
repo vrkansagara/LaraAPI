@@ -1,13 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Entities;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
-class User extends Authenticatable
+/**
+ * Class User.
+ *
+ * @package namespace App\Entities;
+ */
+class User extends Authenticatable implements Transformable
 {
+    use TransformableTrait;
     use Notifiable;
     use HasApiTokens;
 
@@ -17,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'is_status', 'is_confirm', 'is_term_accept', 'created_by', 'updated_by', 'password',
     ];
 
     /**
@@ -28,4 +36,5 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
 }

@@ -164,7 +164,6 @@ return [
         /**
          * Custom provider
          */
-        Caffeinated\Modules\ModulesServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         Arcanedev\Settings\SettingsServiceProvider::class,
@@ -222,7 +221,6 @@ return [
         /**
          * Custom provider
          */
-        'Module' => Caffeinated\Modules\Facades\Module::class,
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
         'Setting' => Arcanedev\Settings\Facades\Setting::class,
 
