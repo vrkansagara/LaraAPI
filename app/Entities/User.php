@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -18,6 +19,13 @@ class User extends Authenticatable implements Transformable
     use TransformableTrait;
     use Notifiable;
     use HasApiTokens;
+    use SoftDeletes;
+
+    const CREATED_AT = 'created_at';
+
+    const UPDATED_AT = 'updated_at';
+
+    const DELETED_AT = 'deleted_at';
 
     /**
      * The attributes that are mass assignable.
@@ -34,7 +42,27 @@ class User extends Authenticatable implements Transformable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token'
     ];
+
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y h:m',
+        'updated_at' => 'datetime:d-m-Y h:m',
+        'deleted_at' => 'datetime:d-m-Y h:m',
+    ];
+
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
 
 }

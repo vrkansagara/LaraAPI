@@ -11,15 +11,15 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminEmail = env('ADMIN_EMAIL');
-        $adminName = env('ADMIN_NAME');
+        $adminEmail = config('app.name');
+        $adminName = config('app.email');
 
-        return \App\User::create([
+        return \App\Entities\User::create([
             'name' => $adminName,
             'email' => $adminEmail,
-            'is_status' => 1,
+            'is_active' => 1,
             'is_confirm' => 1,
-            'is_term_accept' => 1,
+            'is_term_agree' => 1,
             'created_by' => 1,
             'updated_by' => 1,
             'password' => Hash::make($adminEmail),

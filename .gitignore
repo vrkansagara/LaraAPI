@@ -2,6 +2,14 @@ vendor/
 node_modules/
 npm-debug.log
 yarn-error.log
+.idea
+.vscode
+.vagrant
+.env
+.phpunit.result.cache
+storage/logs/*.log
+storage/debugbar/*
+
 
 
 # Laravel 4 specific
@@ -22,11 +30,3 @@ Homestead.json
 .rocketeer/
 
 
-/vendor
-/.idea
-/.vscode
-/.vagrant
-.env
-.phpunit.result.cache
-storage/logs/*.log
-storage/debugbar/*

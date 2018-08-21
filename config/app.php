@@ -13,7 +13,19 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'LaraAPI'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Email
+    |--------------------------------------------------------------------------
+    |
+    | This value is the email of your application. This value is used when the
+    | framework needs to send administration information to the Admin.
+    | This is mainly used for application administration / supper admin only.
+    */
+
+    'email' => env('ADMIN_NAME', 'root@localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -166,7 +178,7 @@ return [
          */
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
-        Arcanedev\Settings\SettingsServiceProvider::class,
+        Arcanedev\LaravelSettings\SettingsServiceProvider::class
 
 
     ],
@@ -222,7 +234,6 @@ return [
          * Custom provider
          */
         'Gravatar' => Creativeorange\Gravatar\Facades\Gravatar::class,
-        'Setting' => Arcanedev\Settings\Facades\Setting::class,
 
     ],
 
