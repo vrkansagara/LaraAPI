@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->boolean('is_active')->default(0)->comment(' 0 = Inactive ,1 = Active');
             $table->boolean('is_confirm')->default(0)->comment(' 0 = Not confirmed ,1 = Confirmed');
             $table->boolean('is_term_agree')->default(0)->comment(' 0 = not accepted,1 = accepted');
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

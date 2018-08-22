@@ -8,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class UserRegisteredEmail extends Mailable
+class UserPasswordChange  extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -33,13 +33,14 @@ class UserRegisteredEmail extends Mailable
     {
         $payLoad = [
             'email' => $this->user->getAttribute('email'),
-            'is_active' => $this->user->getAttribute('is_active'),
             'time' => Carbon::now()
         ];
         $userToken = encrypt($payLoad);
         return $this->from(config('mail.from'))
             ->subject('User Registeration Notification')
-            ->view('mail.user.register')
+            ->view('mail.user.reset_password')
             ->with('userToken',$userToken);
     }
 }
+
+

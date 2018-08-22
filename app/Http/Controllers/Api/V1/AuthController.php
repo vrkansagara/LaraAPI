@@ -7,11 +7,13 @@ use App\Events\UserRegistered;
 use App\Http\Controllers\Api\ApiController;
 use App\Repositories\UserRepository;
 use App\Rules\Password\StrongPassword;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Lcobucci\JWT\Parser;
+use Prettus\Repository\Exceptions\RepositoryException;
 
 
 class AuthController extends ApiController
@@ -67,7 +69,7 @@ class AuthController extends ApiController
             ]);
         $data = [
             'message' => 'You are successfully logout.',
-            'token' => $request->headers->get('Authorization')
+            'token' => $value
         ];
 
         return $this->response($data);
@@ -86,9 +88,7 @@ class AuthController extends ApiController
                 new StrongPassword()
             ],
             'password_confirm' => 'required|same:password',
-            'is_term_agree' => 'required|boolean',
-            'created_by' => 'required',
-
+            'is_term_agree' => 'required|boolean'
         ];
         $validator = $this->validate($request, $rules);
 
@@ -96,11 +96,134 @@ class AuthController extends ApiController
             return $this->response($validator);
         }
         $payload['password'] = Hash::make($payload['password']);
-        $user = $this->userRepository->create($payload);
 
+        try {
+            DB::beginTransaction();
+            $user = $this->userRepository->create($payload);
+            DB::commit();
+            $responseData = [
+                'message' => 'User registered successfully!!!'
+            ];
+        } catch (RepositoryException $exception) {
+            DB::rollBack();
+            $responseData = [
+                'error' => $exception
+            ];
+        }
         event(new UserRegistered($user));
 
-        return $this->response($user->toArray());
+        return $this->response($responseData);
+    }
 
+    public function registerUserVerifyAction($userToken)
+    {
+        if (!empty($userToken)) {
+            $userObject = decrypt($userToken);
+        }
+        if (isset($userObject['time']) && $userObject['time'] instanceof Carbon) {
+            $diffInHours = Carbon::now()->diffInHours($userObject['time']);
+//            $diffInMinutes = Carbon::now()->diffInMinutes($userObject['time']);
+
+            // Set for withing three days
+            if ($diffInHours <= config('auth.register.expire_in.hours')) {
+                $userData = [
+                    'email' => $userObject['email'],
+                    'is_active' => 0,
+                    'is_confirm' => 0
+                ];
+                $user = $this->userRepository->findWhere($userData)->first();
+                if ($user) {
+                    try {
+                        $userData = [
+                            'is_active' => 1,
+                            'is_confirm' => 1
+                        ];
+                        DB::beginTransaction();
+                        $this->userRepository->update($userData, $user->id);
+                        DB::commit();
+                        $responseData = [
+                            'message' => 'User activated successfully!!!'
+                        ];
+                    } catch (RepositoryException $exception) {
+                        DB::rollBack();
+                        $responseData = [
+                            'error' => $exception
+                        ];
+                    }
+                } else {
+                    $responseData = [
+                        'error' => [
+                            'message' => 'You are already registerd with us.'
+                        ]
+
+                    ];
+                }
+
+            } else {
+                $responseData = [
+                    'error' => 'Kindly contact to administrator'
+                ];
+            }
+        }
+
+        return $this->response($responseData);
+    }
+
+
+    /**
+     * Resent password once user token generated.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetPasswordVerifyAction(Request $request)
+    {
+        $payload = $request->all();
+        $rules = [
+            'email' => 'required|email',
+            'password' => [
+                'required',
+                'min:8',
+                'max:80',
+                new StrongPassword()
+            ],
+            'password_confirm' => 'required|same:password',
+        ];
+        $validator = $this->validate($request, $rules);
+
+        if ($validator->fails()) {
+            return $this->response($validator);
+        }
+        $user = $this->userRepository->findByField('email', $payload['email'])->first();
+        if ($user) {
+            $updateData = [
+                'password' => Hash::make($payload['password'])
+            ];
+            try {
+
+                DB::beginTransaction();
+                $this->userRepository->update($updateData, $user->id);
+                DB::commit();
+                $responseData = [
+                    'message' => 'Password updated successfully!!!'
+                ];
+            } catch (RepositoryException $exception) {
+                DB::rollBack();
+                $responseData = [
+                    'error' => $exception
+                ];
+            }
+
+
+        } else {
+            $responseData = [
+                'error' => [
+                    'message' => 'User not found!!!'
+                ]
+            ];
+        }
+
+
+        return $this->response($responseData);
     }
 }

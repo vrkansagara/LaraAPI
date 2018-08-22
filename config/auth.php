@@ -1,7 +1,24 @@
 <?php
 
 return [
-
+    'register' => [
+        'expire_in' => [
+            'hours' => 72,
+            'minutes' => 60,
+        ],
+        'forget' => [
+            'expire_in' => [
+                'hours' => 72,
+                'minutes' => 60,
+            ],
+        ],
+        'reset' => [
+            'expire_in' => [
+                'hours' => 72,
+                'minutes' => 60,
+            ],
+        ]
+    ],
     'TOKEN_EXPIRE' => env('TOKEN_EXPIRE', 15),
     'REFRESH_TOKEN_EXPIRE' => env('REFRESH_TOKEN_EXPIRE', 30),
     /*

@@ -20,3 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/mailable', 'TestController@mailable');
+Route::post('/stripe/webhook','WebhookController@handleWebhook');
+Route::post('/braintree/webhook','WebhookController@handleWebhook');

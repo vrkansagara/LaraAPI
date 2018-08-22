@@ -22,6 +22,10 @@ Route::get('/ping', function (Request $request) {
     return response()->json(\Carbon\Carbon::now());
 });
 
-Route::middleware('api')->post('login', 'AuthController@loginAction');
-Route::middleware('api')->post('logout', 'AuthController@logoutAction');
-Route::middleware('api')->post('register', 'AuthController@registerAction');
+Route::middleware('api')->post('auth/login', 'AuthController@loginAction');
+Route::middleware('api')->post('auth/logout', 'AuthController@logoutAction');
+Route::middleware('api')->post('auth/register', 'AuthController@registerAction');
+Route::middleware('api')->get('auth/verify/{userToken}', ['as' =>'user.register.verify' ,'uses' =>'AuthController@registerUserVerifyAction']);
+
+//Route::middleware('api')->get('auth/reset/password', ['as' =>'user.reset.password' ,'uses' =>'AuthController@resetPasswordAction']);
+Route::middleware('api')->post('auth/reset', ['as' =>'user.password.reset' ,'uses' =>'AuthController@resetPasswordVerifyAction']);

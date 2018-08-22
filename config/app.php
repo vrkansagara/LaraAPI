@@ -178,7 +178,8 @@ return [
          */
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
-        Arcanedev\LaravelSettings\SettingsServiceProvider::class
+        Arcanedev\LaravelSettings\SettingsServiceProvider::class,
+        Laravel\Cashier\CashierServiceProvider::class
 
 
     ],

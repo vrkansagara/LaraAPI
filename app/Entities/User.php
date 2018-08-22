@@ -5,9 +5,11 @@ namespace App\Entities;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 use Laravel\Passport\HasApiTokens;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Class User.
@@ -20,6 +22,8 @@ class User extends Authenticatable implements Transformable
     use Notifiable;
     use HasApiTokens;
     use SoftDeletes;
+    use Billable;
+    use HasRoles;
 
     const CREATED_AT = 'created_at';
 
@@ -33,7 +37,7 @@ class User extends Authenticatable implements Transformable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'is_status', 'is_confirm', 'is_term_accept', 'created_by', 'updated_by', 'password',
+        'name', 'email', 'is_active', 'is_confirm', 'is_term_agree', 'created_by', 'updated_by', 'password',
     ];
 
     /**
@@ -64,5 +68,7 @@ class User extends Authenticatable implements Transformable
      * @var bool
      */
     public $timestamps = true;
+
+    protected $guard_name = 'api';
 
 }
