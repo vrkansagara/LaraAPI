@@ -4,6 +4,14 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 
 class Handler extends ExceptionHandler
@@ -48,8 +56,6 @@ class Handler extends ExceptionHandler
                 */
             }
         }
-
-
         parent::report($exception);
     }
 
@@ -62,11 +68,73 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ( $request->wantsJson() && strpos($request->url(), '/api/') !== false) {
+        if ( strpos($request->url(), '/api/') !== false) {
             \Log::debug('API Request Exception - '.$request->url().' - '.$exception->getMessage().(! empty($request->all()) ? ' - '.json_encode($request->except(['password'])) : ''));
+
+            if ($exception instanceof MethodNotAllowedHttpException) {
+                return $this->setStatusCode(403)->respondWithError('Please check HTTP Request Method. - MethodNotAllowedHttpException');
+            }
+
+            if ($exception instanceof NotFoundHttpException) {
+                return $this->setStatusCode(403)->respondWithError('Please check your URL to make sure request is formatted properly. - NotFoundHttpException');
+            }
+
+            if ($exception instanceof GeneralException) {
+                return $this->setStatusCode(403)->respondWithError($exception->getMessage());
+            }
+
+            if ($exception instanceof ModelNotFoundException) {
+                return $this->setStatusCode(403)->respondWithError('Item could not be found. Please check identifier.');
+            }
+
+            if ($exception instanceof ValidationException) {
+                \Log::debug('API Validation Exception - '.json_encode($exception->validator->messages()));
+
+                return $this->setStatusCode(422)->respondWithError($exception->validator->messages());
+            }
+
+
         }
 
         return parent::render($request, $exception);
+    }
+
+
+    /**
+     * get the status code.
+     *
+     * @return statuscode
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * set the status code.
+     *
+     * @param [type] $statusCode [description]
+     *
+     * @return statuscode
+     */
+    public function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+
+        return $this;
+    }
+
+
+    protected function respondWithError($message)
+    {
+        return $this->respond(
+            [
+                'error' => [
+                    'message'     => $message,
+                    'status_code' => $this->getStatusCode(),
+                ],
+            ]
+        );
     }
 
     /**
@@ -78,10 +146,6 @@ class Handler extends ExceptionHandler
      * "message": "Please enter valid email address"
      * "data" : []
      * }
-     * @param array $data
-     * @param array $headers
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function respond($data, $headers = [])
     {
@@ -110,13 +174,13 @@ class Handler extends ExceptionHandler
                 $errorCode = isset($data['error']['status_code']) ? $data['error']['status_code'] : null;
             } else {
                 $message = null;
-                $errorCode = $this->getStatusCode();
+                $errorCode = 404;
             }
 
             unset($data['message']);
             $payLoad['message'] = $message;
             $payLoad['errorCode'] = $errorCode;
         }
-        return response()->json($payLoad, $this->getStatusCode(), $headers);
+        return response()->json($payLoad, 404, $headers);
     }
 }
