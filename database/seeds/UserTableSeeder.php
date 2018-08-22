@@ -11,8 +11,8 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminEmail = config('app.name');
-        $adminName = config('app.email');
+        $adminName = config('app.name');
+        $adminEmail = config('app.email');
 
         return \App\Entities\User::create([
             'name' => $adminName,

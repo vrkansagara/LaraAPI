@@ -21,3 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/ping', function (Request $request) {
     return response()->json(\Carbon\Carbon::now());
 });
+
+Route::middleware('api')->post('login', 'AuthController@loginAction');
+Route::middleware('api')->post('logout', 'AuthController@logoutAction');
+Route::middleware('api')->post('register', 'AuthController@registerAction');

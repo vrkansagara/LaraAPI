@@ -25,7 +25,7 @@ return [
     | This is mainly used for application administration / supper admin only.
     */
 
-    'email' => env('ADMIN_NAME', 'root@localhost'),
+    'email' => env('ADMIN_EMAIL', 'root@localhost'),
 
     /*
     |--------------------------------------------------------------------------

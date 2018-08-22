@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 
 use App\Events\UserRegistered;
+use App\Http\Controllers\Api\ApiController;
 use App\Repositories\UserRepository;
 use App\Rules\Password\StrongPassword;
 use Illuminate\Http\Request;
