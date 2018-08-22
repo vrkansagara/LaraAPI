@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'LaraAPI'),
+    'name' => env('ADMIN_NAME', 'Vallabh Kansagara'),
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ return [
     | This is mainly used for application administration / supper admin only.
     */
 
-    'email' => env('ADMIN_EMAIL', 'root@localhost'),
+    'email' => env('ADMIN_EMAIL', 'vrkansagara@gmail.com'),
 
     /*
     |--------------------------------------------------------------------------

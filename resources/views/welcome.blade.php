@@ -81,6 +81,11 @@
                 <div class="title m-b-md">
                     {{config('app.name')}}
                 </div>
+                <div class="links">
+                    <a target="_blank" href="https://vrkansagara.in">Blog</a>
+                    <a target="_blank" href="https://github.com/vrkansagara">GitHub</a>
+                    <a target="_blank" href="https://twitter.com/vrkansagara">Twitter</a>
+                </div>
             </div>
         </div>
     </body>
