@@ -37,7 +37,7 @@ class UserRegisteredEmail extends Mailable
             'time' => Carbon::now()
         ];
         $userToken = encrypt($payLoad);
-        return $this->from(config('mail.from'))
+        return $this->from(config('mail.from.address'))
             ->subject('User Registeration Notification')
             ->view('mail.user.register')
             ->with('userToken',$userToken);

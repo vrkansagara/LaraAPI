@@ -13,9 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::resource('users', 'UsersController');
 
 
 Route::get('/ping', function (Request $request) {
@@ -25,6 +27,8 @@ Route::get('/ping', function (Request $request) {
 Route::middleware('api')->post('auth/login', 'AuthController@loginAction');
 Route::middleware('api')->post('auth/logout', 'AuthController@logoutAction');
 Route::middleware('api')->post('auth/register', 'AuthController@registerAction');
+
+// Verify user email address.
 Route::middleware('api')->get('auth/verify/{userToken}', ['as' =>'user.register.verify' ,'uses' =>'AuthController@registerUserVerifyAction']);
 
 //Route::middleware('api')->get('auth/reset/password', ['as' =>'user.reset.password' ,'uses' =>'AuthController@resetPasswordAction']);
